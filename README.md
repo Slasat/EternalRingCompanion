@@ -93,23 +93,9 @@ part selector.
 If a read returns nothing after attach, PCSX2 is at the BIOS or main menu — load a save,
 then **Link** again.
 
-## Memory map
-
-The offsets are taken from the sibling `PS2Trainer` project's `EternalRingFieldMap.cs`, which
-documents how each was located and verified. Only the stat, inventory, and warp offsets are
-used here. The scanner, entity tooling, debug-menu injector, and HTTP API of that project are
-not included.
-
 ## Teleport list
 
 Order and names were derived from three sources:
-
-- The saijojoe GameFAQs walkthrough (guide 8207), chapter order. Its area names are a fan
-  translation of the Japanese release and do not match the English game; they were re-mapped
-  to local level ids by content (e.g. "Dragon Cave" = Waterfall Cavern = level 72,
-  "Sea Cliff Forest" = Cliff Forest = level 0).
-- `PS2Trainer/Tools/KeyRandomizer/data/logic.json`, a code-derived reachability graph of the
-  main route.
 - Community notes ("Wind Route", Vergiliaux) for the key order (Water → Fire → Wind → Earth)
   and where each key is obtained and used.
 
@@ -142,36 +128,6 @@ record.
 | 21 | Southern Hideout | | 9 |
 | 22 | N. Shore of Island | Shore / Landing | 71 / 75 |
 | 23 | Sealed Labyrinth | Part 1–4 | 50 / 51 / 52 / 53 |
-
-Spawn coordinates are the entrance records extracted from each level's own block data in the
-`PS2Trainer` work; most were verified there by live teleport. A minority (Library, some
-optional rooms) are best-available and may require a step onto solid ground on arrival.
-
-## Build
-
-```
-dotnet build -c Release
-```
-
-Output: `bin/Release/net10.0-windows/EternalRingCompanion.exe` (framework-dependent).
-
-Self-contained single-file:
-
-```
-dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
-```
-
-## Continuous integration
-
-`.github/workflows/build.yml`:
-
-- Runs on every branch push, every `v*` tag, and pull requests.
-- `build` job (windows-latest): restores, builds `-c Release`, and publishes a self-contained
-  single-file `win-x64` binary. The version is taken from the tag (`v1.2.3` → `1.2.3`) or is
-  `0.0.0` with an informational `0.0.0-dev.<sha>` for branch builds. The published binary is
-  zipped and uploaded as a workflow artifact.
-- `release` job: on `v*` tags only, downloads the artifact and publishes a GitHub Release with
-  the zip attached and auto-generated notes.
 
 ## Credits
 

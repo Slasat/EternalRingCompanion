@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <LangVersion>latest</LangVersion>
+
+    <!-- 64-bit is mandatory: a 32-bit process cannot Read/WriteProcessMemory a
+         64-bit target (pcsx2-qt is x64). -->
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyName>EternalRingCompanion</AssemblyName>
+    <RootNamespace>EternalRingCompanion</RootNamespace>
+    <ApplicationIcon></ApplicationIcon>
+
+    <Product>Eternal Ring Companion</Product>
+    <Authors>Slasat</Authors>
+    <Version>1.0.0</Version>
+    <InformationalVersion>1.0.0</InformationalVersion>
+  </PropertyGroup>
+
+</Project>

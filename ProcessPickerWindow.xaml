@@ -1,0 +1,31 @@
+<Window x:Class="EternalRingCompanion.ProcessPickerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Choose a process" Height="420" Width="460"
+        WindowStartupLocation="CenterOwner" WindowStyle="None" ResizeMode="NoResize"
+        Background="{StaticResource WindowBg}" AllowsTransparency="False">
+    <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Padding="20">
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Top" Text="Choose the emulator" Style="{StaticResource H1}"/>
+            <TextBlock DockPanel.Dock="Top" Margin="0,4,0,14" TextWrapping="Wrap" Style="{StaticResource Muted}"
+                       Text="Pick the PCSX2 process that's running Eternal Ring."/>
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
+                <Button Content="Cancel" Style="{StaticResource GhostButton}" Margin="0,0,8,0" Click="OnCancel"/>
+                <Button x:Name="OkBtn" Content="Connect" Style="{StaticResource AccentButton}" Click="OnOk"/>
+            </StackPanel>
+            <ListBox x:Name="List" Style="{StaticResource PlainListBox}" MouseDoubleClick="OnOk">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="13"/>
+                            <TextBlock Style="{StaticResource Muted}">
+                                <Run Text="pid "/><Run Text="{Binding Pid, Mode=OneWay}"/>
+                                <Run Text="{Binding WindowTitle, Mode=OneWay}"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
+    </Border>
+</Window>

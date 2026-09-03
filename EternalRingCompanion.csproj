@@ -24,4 +24,15 @@
     <InformationalVersion>1.0.0</InformationalVersion>
   </PropertyGroup>
 
+  <!-- `dotnet publish -c Release` produces a single self-contained exe
+       (no .NET runtime needed on the target machine). -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
 </Project>

@@ -9,7 +9,7 @@ on:
   pull_request:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
@@ -39,34 +39,28 @@ jobs:
           echo "num=${NUM}"   >> "$GITHUB_OUTPUT"
           echo "info=${INFO}" >> "$GITHUB_OUTPUT"
 
-      - name: Restore
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build -c Release --no-restore -p:Version=${{ steps.ver.outputs.num }} -p:InformationalVersion=${{ steps.ver.outputs.info }}
-
-      - name: Publish (self-contained, single file)
+      # The csproj already pins RID / self-contained / single-file / embedded-pdb
+      # for Release, so publish needs nothing but the version overrides.
+      - name: Publish
         run: >
-          dotnet publish -c Release -r win-x64 --self-contained true
-          -p:PublishSingleFile=true
-          -p:IncludeNativeLibrariesForSelfExtract=true
-          -p:EnableCompressionInSingleFile=true
+          dotnet publish -c Release
           -p:Version=${{ steps.ver.outputs.num }}
           -p:InformationalVersion=${{ steps.ver.outputs.info }}
           -o publish
 
-      - name: Package
-        shell: pwsh
+      - name: Name the exe
+        id: pkg
+        shell: bash
         run: |
-          $name = "EternalRingCompanion-${{ steps.ver.outputs.info }}-win-x64.zip"
-          Compress-Archive -Path publish/* -DestinationPath $name
-          echo "ZIP=$name" >> $env:GITHUB_ENV
+          OUT="EternalRingCompanion-${{ steps.ver.outputs.info }}-win-x64.exe"
+          mv publish/EternalRingCompanion.exe "publish/${OUT}"
+          echo "exe=${OUT}" >> "$GITHUB_OUTPUT"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: EternalRingCompanion-win-x64
-          path: ${{ env.ZIP }}
+          path: publish/${{ steps.pkg.outputs.exe }}
           if-no-files-found: error
 
   release:
@@ -85,6 +79,6 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
-          files: EternalRingCompanion-*-win-x64.zip
+          files: EternalRingCompanion-*-win-x64.exe
           generate_release_notes: true
           fail_on_unmatched_files: true
